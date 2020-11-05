@@ -1,18 +1,16 @@
-# ifood Laravel
 
-Pacote de integração com [https://omie.com.br/](https://omie.com.br/)
 
 ## Instalando
 
 Instale com [composer](https://getcomposer.org/):
 
 ```bash
-composer require bee-delivery/omie
+composer require bee-delivery/ifood
 ```
 
 ## Como utilizar?
 
-[Documentação API ifood](https://developer.omie.com.br/)
+[Documentação API ifood](https://developer.ifood.com.br/)
 
 
 ## Licença
