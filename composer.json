@@ -12,7 +12,7 @@
             "type": "vcs",
             "url": "git@github.com:bee-delivery/ifood.git"
         }
-    ]
+    ],
     "type": "library",
     "license": "GPL-3.0-only",
     "minimum-stability": "beta",
