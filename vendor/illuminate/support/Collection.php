@@ -31,15 +31,23 @@ class Collection implements ArrayAccess, Enumerable
     }
 
     /**
-     * Create a collection with the given range.
+     * Create a new collection by invoking the callback a given amount of times.
      *
-     * @param  int  $from
-     * @param  int  $to
+     * @param  int  $number
+     * @param  callable|null  $callback
      * @return static
      */
-    public static function range($from, $to)
+    public static function times($number, callable $callback = null)
     {
-        return new static(range($from, $to));
+        if ($number < 1) {
+            return new static;
+        }
+
+        if (is_null($callback)) {
+            return new static(range(1, $number));
+        }
+
+        return (new static(range(1, $number)))->map($callback);
     }
 
     /**
@@ -127,7 +135,7 @@ class Collection implements ArrayAccess, Enumerable
 
         $collection = isset($key) ? $this->pluck($key) : $this;
 
-        $counts = new static;
+        $counts = new self;
 
         $collection->each(function ($value) use ($counts) {
             $counts[$value] = isset($counts[$value]) ? $counts[$value] + 1 : 1;
@@ -404,7 +412,7 @@ class Collection implements ArrayAccess, Enumerable
      */
     public function get($key, $default = null)
     {
-        if (array_key_exists($key, $this->items)) {
+        if ($this->offsetExists($key)) {
             return $this->items[$key];
         }
 
@@ -493,7 +501,7 @@ class Collection implements ArrayAccess, Enumerable
         $keys = is_array($key) ? $key : func_get_args();
 
         foreach ($keys as $value) {
-            if (! array_key_exists($value, $this->items)) {
+            if (! $this->offsetExists($value)) {
                 return false;
             }
         }
@@ -512,7 +520,7 @@ class Collection implements ArrayAccess, Enumerable
     {
         $first = $this->first();
 
-        if (is_array($first) || (is_object($first) && ! $first instanceof Stringable)) {
+        if (is_array($first) || is_object($first)) {
             return implode($glue, $this->pluck($value)->all());
         }
 
@@ -608,7 +616,7 @@ class Collection implements ArrayAccess, Enumerable
     /**
      * Get the values of a given key.
      *
-     * @param  string|array|int|null  $value
+     * @param  string|array  $value
      * @param  string|null  $key
      * @return static
      */
@@ -792,7 +800,7 @@ class Collection implements ArrayAccess, Enumerable
      */
     public function prepend($value, $key = null)
     {
-        $this->items = Arr::prepend($this->items, ...func_get_args());
+        $this->items = Arr::prepend($this->items, $value, $key);
 
         return $this;
     }
@@ -1060,19 +1068,6 @@ class Collection implements ArrayAccess, Enumerable
         }
 
         return new static($chunks);
-    }
-
-    /**
-     * Chunk the collection into chunks with a callback.
-     *
-     * @param  callable  $callback
-     * @return static
-     */
-    public function chunkWhile(callable $callback)
-    {
-        return new static(
-            $this->lazy()->chunkWhile($callback)->mapInto(static::class)
-        );
     }
 
     /**
@@ -1353,7 +1348,7 @@ class Collection implements ArrayAccess, Enumerable
      */
     public function offsetExists($key)
     {
-        return isset($this->items[$key]);
+        return array_key_exists($key, $this->items);
     }
 
     /**

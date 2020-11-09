@@ -125,7 +125,7 @@ interface Job
      *
      * @return int|null
      */
-    public function retryUntil();
+    public function timeoutAt();
 
     /**
      * Get the name of the queued job class.

@@ -12,7 +12,7 @@ class Pluralizer
     /**
      * Uncountable word forms.
      *
-     * @var string[]
+     * @var array
      */
     public static $uncountable = [
         'audio',

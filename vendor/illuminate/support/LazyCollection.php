@@ -4,7 +4,6 @@ namespace Illuminate\Support;
 
 use ArrayIterator;
 use Closure;
-use DateTimeInterface;
 use Illuminate\Support\Traits\EnumeratesValues;
 use Illuminate\Support\Traits\Macroable;
 use IteratorAggregate;
@@ -39,7 +38,39 @@ class LazyCollection implements Enumerable
     }
 
     /**
-     * Create a collection with the given range.
+     * Create a new instance with no items.
+     *
+     * @return static
+     */
+    public static function empty()
+    {
+        return new static([]);
+    }
+
+    /**
+     * Create a new instance by invoking the callback a given amount of times.
+     *
+     * @param  int  $number
+     * @param  callable|null  $callback
+     * @return static
+     */
+    public static function times($number, callable $callback = null)
+    {
+        if ($number < 1) {
+            return new static;
+        }
+
+        $instance = new static(function () use ($number) {
+            for ($current = 1; $current <= $number; $current++) {
+                yield $current;
+            }
+        });
+
+        return is_null($callback) ? $instance : $instance->map($callback);
+    }
+
+    /**
+     * Create an enumerable with the given range.
      *
      * @param  int  $from
      * @param  int  $to
@@ -48,14 +79,8 @@ class LazyCollection implements Enumerable
     public static function range($from, $to)
     {
         return new static(function () use ($from, $to) {
-            if ($from <= $to) {
-                for (; $from <= $to; $from++) {
-                    yield $from;
-                }
-            } else {
-                for (; $from >= $to; $from--) {
-                    yield $from;
-                }
+            for (; $from <= $to; $from++) {
+                yield $from;
             }
         });
     }
@@ -1058,43 +1083,6 @@ class LazyCollection implements Enumerable
     }
 
     /**
-     * Chunk the collection into chunks with a callback.
-     *
-     * @param  callable  $callback
-     * @return static
-     */
-    public function chunkWhile(callable $callback)
-    {
-        return new static(function () use ($callback) {
-            $iterator = $this->getIterator();
-
-            $chunk = new Collection();
-
-            if ($iterator->valid()) {
-                $chunk[$iterator->key()] = $iterator->current();
-
-                $iterator->next();
-            }
-
-            while ($iterator->valid()) {
-                if (! $callback($iterator->current(), $iterator->key(), $chunk)) {
-                    yield new static($chunk);
-
-                    $chunk = new Collection();
-                }
-
-                $chunk[$iterator->key()] = $iterator->current();
-
-                $iterator->next();
-            }
-
-            if ($chunk->isNotEmpty()) {
-                yield new static($chunk);
-            }
-        });
-    }
-
-    /**
      * Sort through each item with a callback.
      *
      * @param  callable|null|int  $callback
@@ -1215,21 +1203,6 @@ class LazyCollection implements Enumerable
     }
 
     /**
-     * Take items in the collection until a given point in time.
-     *
-     * @param  \DateTimeInterface  $timeout
-     * @return static
-     */
-    public function takeUntilTimeout(DateTimeInterface $timeout)
-    {
-        $timeout = $timeout->getTimestamp();
-
-        return $this->takeWhile(function () use ($timeout) {
-            return $this->now() < $timeout;
-        });
-    }
-
-    /**
      * Take items in the collection while the given condition is met.
      *
      * @param  mixed  $value
@@ -1239,9 +1212,7 @@ class LazyCollection implements Enumerable
     {
         $callback = $this->useAsCallable($value) ? $value : $this->equality($value);
 
-        return $this->takeUntil(function ($item, $key) use ($callback) {
-            return ! $callback($item, $key);
-        });
+        return $this->takeUntil($this->negate($callback));
     }
 
     /**
@@ -1400,15 +1371,5 @@ class LazyCollection implements Enumerable
         return new static(function () use ($method, $params) {
             yield from $this->collect()->$method(...$params);
         });
-    }
-
-    /**
-     * Get the current time.
-     *
-     * @return int
-     */
-    protected function now()
-    {
-        return time();
     }
 }

@@ -35,7 +35,7 @@ interface StatefulGuard extends Guard
      *
      * @param  mixed  $id
      * @param  bool  $remember
-     * @return \Illuminate\Contracts\Auth\Authenticatable|bool
+     * @return \Illuminate\Contracts\Auth\Authenticatable
      */
     public function loginUsingId($id, $remember = false);
 

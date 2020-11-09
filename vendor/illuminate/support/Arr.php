@@ -144,10 +144,6 @@ class Arr
      */
     public static function exists($array, $key)
     {
-        if ($array instanceof Enumerable) {
-            return $array->has($key);
-        }
-
         if ($array instanceof ArrayAccess) {
             return $array->offsetExists($key);
         }
@@ -409,7 +405,7 @@ class Arr
      * Pluck an array of values from an array.
      *
      * @param  iterable  $array
-     * @param  string|array|int|null  $value
+     * @param  string|array  $value
      * @param  string|array|null  $key
      * @return array
      */
@@ -467,7 +463,7 @@ class Arr
      */
     public static function prepend($array, $value, $key = null)
     {
-        if (func_num_args() == 2) {
+        if (is_null($key)) {
             array_unshift($array, $value);
         } else {
             $array = [$key => $value] + $array;
@@ -498,12 +494,11 @@ class Arr
      *
      * @param  array  $array
      * @param  int|null  $number
-     * @param  bool|false  $preserveKeys
      * @return mixed
      *
      * @throws \InvalidArgumentException
      */
-    public static function random($array, $number = null, $preserveKeys = false)
+    public static function random($array, $number = null)
     {
         $requested = is_null($number) ? 1 : $number;
 
@@ -527,14 +522,8 @@ class Arr
 
         $results = [];
 
-        if ($preserveKeys) {
-            foreach ((array) $keys as $key) {
-                $results[$key] = $array[$key];
-            }
-        } else {
-            foreach ((array) $keys as $key) {
-                $results[] = $array[$key];
-            }
+        foreach ((array) $keys as $key) {
+            $results[] = $array[$key];
         }
 
         return $results;
@@ -616,26 +605,20 @@ class Arr
      * Recursively sort an array by keys and values.
      *
      * @param  array  $array
-     * @param  int  $options
-     * @param  bool  $descending
      * @return array
      */
-    public static function sortRecursive($array, $options = SORT_REGULAR, $descending = false)
+    public static function sortRecursive($array)
     {
         foreach ($array as &$value) {
             if (is_array($value)) {
-                $value = static::sortRecursive($value, $options, $descending);
+                $value = static::sortRecursive($value);
             }
         }
 
         if (static::isAssoc($array)) {
-            $descending
-                    ? krsort($array, $options)
-                    : ksort($array, $options);
+            ksort($array);
         } else {
-            $descending
-                    ? rsort($array, $options)
-                    : sort($array, $options);
+            sort($array);
         }
 
         return $array;

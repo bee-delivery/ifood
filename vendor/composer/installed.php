@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'f85fa3dde4ab7e6d68c0d41ade3130fc4e452e2d',
+    'reference' => '2569bfa20d7f13b65dfe1d91e521e4702effeed5',
     'name' => 'bee-delivery/ifood',
   ),
   'versions' => 
@@ -18,7 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'f85fa3dde4ab7e6d68c0d41ade3130fc4e452e2d',
+      'reference' => '2569bfa20d7f13b65dfe1d91e521e4702effeed5',
     ),
     'doctrine/inflector' => 
     array (
@@ -56,41 +56,23 @@
       ),
       'reference' => '53330f47520498c0ae1f61f7e2c90f55690c06a3',
     ),
-    'illuminate/collections' => 
-    array (
-      'pretty_version' => 'v8.13.0',
-      'version' => '8.13.0.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => 'e61e796ff98e19eac5e6735ea6abfa66f4a2f6db',
-    ),
     'illuminate/contracts' => 
     array (
-      'pretty_version' => 'v8.13.0',
-      'version' => '8.13.0.0',
+      'pretty_version' => 'v7.29.3',
+      'version' => '7.29.3.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'c23428149639d5257916ad10d390cdbeffe4d504',
-    ),
-    'illuminate/macroable' => 
-    array (
-      'pretty_version' => 'v8.13.0',
-      'version' => '8.13.0.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '300aa13c086f25116b5f3cde3ca54ff5c822fb05',
+      'reference' => '7ddcd4342c174e1be0e04f6011fea185d3c653c1',
     ),
     'illuminate/support' => 
     array (
-      'pretty_version' => 'v8.13.0',
-      'version' => '8.13.0.0',
+      'pretty_version' => 'v7.29.3',
+      'version' => '7.29.3.0',
       'aliases' => 
       array (
       ),
-      'reference' => '21ca3da65ffb4efbaa489aee9c36d01ab6d0c3e2',
+      'reference' => 'd67eafa7fdba279266e797eda035633e3ca029d0',
     ),
     'nesbot/carbon' => 
     array (
@@ -216,12 +198,12 @@
     ),
     'voku/portable-ascii' => 
     array (
-      'pretty_version' => '1.5.3',
-      'version' => '1.5.3.0',
+      'pretty_version' => '1.5.4',
+      'version' => '1.5.4.0',
       'aliases' => 
       array (
       ),
-      'reference' => '25bcbf01678930251fd572891447d9e318a6e2b8',
+      'reference' => '87dc337d4200b32717dd3849fea846319e897658',
     ),
   ),
 );
