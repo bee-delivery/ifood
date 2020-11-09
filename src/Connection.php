@@ -1,6 +1,6 @@
 <?php
 
-namespace BeeDelivery\ifood\src;
+namespace BeeDelivery\ifood;
 
 
 use GuzzleHttp\Client;

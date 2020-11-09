@@ -1,8 +1,6 @@
 <?php
 
-namespace BeeDelivery\ifood\src;
-
-use BeeDelivery\ifood\src\Connection;
+namespace BeeDelivery\ifood;
 
 class Pedido
 {
