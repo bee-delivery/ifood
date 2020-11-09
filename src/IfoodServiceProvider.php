@@ -30,7 +30,7 @@ class ifoodServiceProvider extends ServiceProvider
 
         // Register the service the package provides.
         $this->app->singleton('ifood', function ($app) {
-            return new ifood;
+            return new Ifood;
         });
     }
 

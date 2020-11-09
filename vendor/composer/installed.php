@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '2569bfa20d7f13b65dfe1d91e521e4702effeed5',
+    'reference' => '03f7b89edef1ddd6bee625e3ca151be475ad8b21',
     'name' => 'bee-delivery/ifood',
   ),
   'versions' => 
@@ -18,7 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '2569bfa20d7f13b65dfe1d91e521e4702effeed5',
+      'reference' => '03f7b89edef1ddd6bee625e3ca151be475ad8b21',
     ),
     'doctrine/inflector' => 
     array (
