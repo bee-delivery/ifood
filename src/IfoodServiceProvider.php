@@ -4,7 +4,7 @@ namespace BeeDelivery\ifood;
 
 use Illuminate\Support\ServiceProvider;
 
-class ifoodServiceProvider extends ServiceProvider
+class IfoodServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
