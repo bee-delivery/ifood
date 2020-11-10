@@ -21,14 +21,14 @@ class Connection {
 
         $this->base_url = 'https://pos-api.ifood.com.br';
         $this->client_id = $client_id;
-        $this->client_id = $client_secret;
+        $this->client_secret = $client_secret;
         $this->username =  $username;
         $this->password = $password;
 
         $this->http = new Client([
             'headers' => [
-                'base_uri' => $this->base_url,
-                'timeout'  => 2.0
+                'timeout'  => 2.0,
+                'content-type' => 'multipart/form-data'
             ],
         ]);
 
@@ -37,19 +37,22 @@ class Connection {
 
     public function auth(){
         try {
-           $response =  $this->http->post('/oauth/token', [
-                'json' => [
+            $body = [
+                'form_params' => [
                     'cliente_id' => $this->client_id,
                     'client_secret' => $this->client_secret,
                     'grant_type' => 'password',
                     'username' => $this->username,
                     'password' => $this->password
                 ]
-            ]);
+            ];
 
-           $response_auth = $response->getBody();
-           return $response_auth['access_token'];
+            $response =  $this->http->request('POST',$this->base_url.'/oauth/token',$body);
+
+            $response_auth = $response->getBody();
+            return $response_auth['access_token'];
         } catch (GuzzleException $e) {
+            return $e;
         }
     }
 
