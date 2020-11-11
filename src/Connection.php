@@ -47,7 +47,7 @@ class Connection {
                 ]
             ];
 
-            $response =  $this->http->request('POST',$this->base_url.'/oauth/token',$body);
+            $response =  $this->http->request('POST',$this->base_url.'/oauth/token', $body);
 
             $response_auth = $response->getBody();
             return $response_auth['access_token'];
