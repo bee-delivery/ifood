@@ -51,7 +51,7 @@ class Connection {
 
             curl_close($curl);
             $response = json_decode($response);
-            return $response['access_token'];
+            return $response->access_token;
         }catch (\Exception $e){
 
             return $e;
