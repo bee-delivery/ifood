@@ -9,7 +9,6 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class Connection {
 
-    public $http;
     public $base_url;
     public $client_id;
     public $client_secret;
@@ -25,58 +24,69 @@ class Connection {
         $this->username =  $username;
         $this->password = $password;
 
-        $this->http = new Client([
-            'headers' => [
-                'timeout'  => 2.0,
-                'content-type' => 'multipart/form-data'
-            ],
-        ]);
-
-        return $this->http;
     }
 
     public function auth(){
+
         try {
-            $body = [
-                'form_params' => [
-                    'cliente_id' => $this->client_id,
-                    'client_secret' => $this->client_secret,
-                    'grant_type' => 'password',
-                    'username' => $this->username,
-                    'password' => $this->password
-                ]
-            ];
+            $curl = curl_init();
 
-            $response =  $this->http->request('POST',$this->base_url.'/oauth/token', $body);
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $this->base_url."/oauth/token",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => array('client_id' => 'beedelivery','client_secret' => '59W5ajbz','grant_type' => 'password','username' => 'POS-328207445','password' => 'POS-328207445'),
+                CURLOPT_HTTPHEADER => array(
+                    "content-type: multipart/form-data",
+                    "Cookie: JSESSIONID=9FB5ABBD1391D4EC6FE7F698B3B7B627"
+                ),
+            ));
 
-            $response_auth = $response->getBody();
-            return $response_auth['access_token'];
-        } catch (GuzzleException $e) {
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            return $response['access_token'];
+        }catch (\Exception $e){
+
             return $e;
         }
+
+
     }
 
     public function get($url)
     {
 
         try{
-            $body = [
-                'header' => [
-                    'Authorization'  => 'Bearer '.$this->auth()
-                ]
-            ];
-            $response = $this->http->get($this->base_url . $url, $body);
-            return [
-                'code'     => $response->getStatusCode(),
-                'response' => json_decode($response->getBody()->getContents())
-            ];
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $this->base_url.$url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => array(
+                    "content-type: multipart/form-data",
+                    "Cookie: JSESSIONID=9FB5ABBD1391D4EC6FE7F698B3B7B627",
+                    "Authorization"  => "Bearer ".$this->auth()
+                ),
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            return $response;
         }catch (\Exception $e){
 
-            return [
-                'code'     => $e->getCode(),
-                'response' => $e->getMessage()
-            ];
-        } catch (GuzzleException $e) {
             return $e;
         }
 
@@ -84,33 +94,39 @@ class Connection {
 
     public function post($url, $params)
     {
-        $body = [
-            'json' => $params,
-            'header' => [
-                'Authorization'  => 'Bearer '.$this->auth(),
-                'Content-Type' => 'application/json',
-                'Cache-Control' => 'no-cache'
-            ]
-        ];
-        
+
         try{
 
-            $response = $this->http->post($this->base_url . $url, $body);
+            $curl = curl_init();
 
-            return [
-                'code'     => $response->getStatusCode(),
-                'response' => json_decode($response->getBody()->getContents())
-            ];
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $this->base_url.$url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $params,
+                CURLOPT_HTTPHEADER => array(
+                    'Authorization'  => 'Bearer '.$this->auth(),
+                    'Content-Type' => 'application/json',
+                    'Cache-Control' => 'no-cache',
+                    "Cookie: JSESSIONID=9FB5ABBD1391D4EC6FE7F698B3B7B627"
+                ),
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+
+            return $response;
 
         }catch (\Exception $e){
 
-            return [
-                'code'     => $e->getCode(),
-                'response' => $e->getMessage()
-            ];
-            
-        } catch (GuzzleException $e) {
             return $e;
+            
         }
     }
 

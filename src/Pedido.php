@@ -16,7 +16,6 @@ class Pedido
     /**
      * listar os pedidos
      *
-     * @return array|\Exception|\GuzzleHttp\Exception\GuzzleException
      */
     public function listar()
     {
@@ -26,7 +25,6 @@ class Pedido
     /**
      * Consulta os dados de um pedido
      *
-     * @return array|\Exception|\GuzzleHttp\Exception\GuzzleException
      */
     public function consultar($id)
     {
