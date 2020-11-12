@@ -62,6 +62,7 @@ class Connection {
 
     public function get($url)
     {
+        $token = $this->auth();
 
         try{
             $curl = curl_init();
@@ -76,9 +77,7 @@ class Connection {
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "GET",
                 CURLOPT_HTTPHEADER => array(
-                    "content-type: multipart/form-data",
-                    "Cookie: JSESSIONID=9FB5ABBD1391D4EC6FE7F698B3B7B627",
-                    "Authorization"  => "Bearer ".$this->auth()
+                    "Authorization: Bearer ".$token
                 ),
             ));
 
@@ -97,6 +96,7 @@ class Connection {
     public function post($url, $params)
     {
 
+        $token = $this->auth();
         try{
 
             $curl = curl_init();
@@ -112,10 +112,7 @@ class Connection {
                 CURLOPT_CUSTOMREQUEST => "POST",
                 CURLOPT_POSTFIELDS => $params,
                 CURLOPT_HTTPHEADER => array(
-                    'Authorization'  => 'Bearer '.$this->auth(),
-                    'Content-Type' => 'application/json',
-                    'Cache-Control' => 'no-cache',
-                    "Cookie: JSESSIONID=9FB5ABBD1391D4EC6FE7F698B3B7B627"
+                    "Authorization: Bearer ".$token
                 ),
             ));
 
